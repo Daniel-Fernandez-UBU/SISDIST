@@ -3,6 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>es.ubu.lsi.echoclient</groupId>
+	
 	<artifactId>EchoClientSocket</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -32,7 +33,7 @@
 				<configuration>
 					<verbose>true</verbose>
 					<fork>true</fork>
-					<executable><!-- path-to-javac -->
+					<executable>"C:\Program Files\Java\jdk-19\bin\javac"<!-- path-to-javac -->
 					</executable>
 					<compilerVersion>1.7</compilerVersion>
 					<source>1.7</source>
@@ -43,13 +44,46 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
-				<configuration>
-					<mainClass>es.ubu.lsi.echoclient.EchoClient</mainClass>
-					<arguments>
-						<argument>localhost</argument>
-						<argument>2000</argument>
-					</arguments>
-				</configuration>
+				<executions>
+					<execution>
+						<id>server</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>es.ubu.lsi.echoserver.EchoServer</mainClass>
+						<arguments>
+							<argument>20000</argument>
+						</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>cliente-pio</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>es.ubu.lsi.echoclient.EchoClient</mainClass>
+							<arguments>
+								<argument>localhost</argument>
+								<argument>20000</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>cliente-blas</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>es.ubu.lsi.echoclient.EchoClient</mainClass>
+							<arguments>
+								<argument>localhost</argument>
+								<argument>20000</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

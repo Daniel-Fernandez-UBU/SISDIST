@@ -53,6 +53,7 @@
 							<mainClass>es.ubu.lsi.echoserver.EchoServer</mainClass>
 						<arguments>
 							<argument>20000</argument>
+							<argument>20030</argument>
 						</arguments>
 						</configuration>
 					</execution>
@@ -78,7 +79,33 @@
 							<mainClass>es.ubu.lsi.echoclient.EchoClient</mainClass>
 							<arguments>
 								<argument>localhost</argument>
-								<argument>20000</argument>
+								<argument>20001</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>cliente-vetado1</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>es.ubu.lsi.echoclient.EchoClient</mainClass>
+							<arguments>
+								<argument>localhost</argument>
+								<argument>20020</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>cliente-vetado2</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>es.ubu.lsi.echoclient.EchoClient</mainClass>
+							<arguments>
+								<argument>localhost</argument>
+								<argument>20025</argument>
 							</arguments>
 						</configuration>
 					</execution>

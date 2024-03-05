@@ -32,35 +32,80 @@ package es.ubu.lsi.echoserver;
  */ 
 
 import java.net.*;
+import java.util.*;
 import java.io.*;
 
 public class EchoServer {
 	
     public static void main(String[] args) throws IOException {
         
-        if (args.length != 1) {
-            System.err.println("Usage: java EchoServer <port number>");
+        if (args.length != 2) {
+            System.err.println("Usage: java EchoServer <port number ini> <port number fin>");
             System.exit(1);
         }
         
-        int portNumber = Integer.parseInt(args[0]);
-        System.out.println("Escuchando por puerto: " + portNumber);
-        
-        try  (
-            	ServerSocket serverSocket = new ServerSocket(Integer.parseInt(args[0]));
-   		)
-        {
-            while (true){
-                Socket clientSocket = serverSocket.accept();     
-                System.out.println("Nuevo Cliente: " + clientSocket.getInetAddress() + "/" + clientSocket.getPort());
-            	Thread hilonuevocliente = new ThreadServerHandler(clientSocket);
-            	hilonuevocliente.start();
-            }
-        	
-        } catch (IOException e) {
-            System.out.println("Exception caught when trying to listen on port " + portNumber + " or listening for a connection");
-            System.out.println(e.getMessage());
+        // Controlamos que el puerto inicial sea menor
+        if (Integer.parseInt(args[0]) >= Integer.parseInt(args[1])) {
+            System.err.println("El puerto inicial debe ser menor que el puerto final");
+            System.err.println("Usage: java EchoServer <port number ini> <port number fin>");
+            System.exit(1);
         }
+        int portNumberIni = Integer.parseInt(args[0]);
+        int portNumberFin = Integer.parseInt(args[1]);
+        
+        List<Integer> portList = listadoPuertos(portNumberIni, portNumberFin);
+		
+		//Puertos en la lista negra
+		List<Integer> blacklist = Arrays.asList(20020, 20025);
+	
+		System.out.println("Listado de puertos vetados" + blacklist);
+        System.out.println("Escuchando en los intervalos de puertos: " + portNumberIni + " - " + portNumberFin);
+        
+        for (Integer port: portList) {
+        	Thread thread = new Thread(() -> {
+		        try  (
+		            	ServerSocket serverSocket = new ServerSocket(port);
+		   		)
+		        {
+		            while (true){
+		                Socket clientSocket = serverSocket.accept();
+		                Integer puertoLocal = clientSocket.getLocalPort();
+		                if (blacklist.contains(puertoLocal)) {
+		                    clientSocket.close(); // Cerrar la conexión con el cliente
+		                    throw new IOException("El puerto " + puertoLocal + " está en la lista negra");
+		                } else {
+			                System.out.println("Nuevo Cliente: " + clientSocket.getInetAddress() + "/" + clientSocket.getPort());
+			            	Thread hilonuevocliente = new ThreadServerHandler(clientSocket);
+			            	hilonuevocliente.start();
+		                }
+		            }
+		        	
+		        } catch (IOException e) {
+		            System.out.println("Exception caught when trying to listen on port: " + port + " or listening for a connection");
+		            System.out.println(e.getMessage());
+		        }
+        	});
+        	thread.start();
+        }
+    }
+    /**
+     * Método listadoPuertos
+     * 
+     * Dado un puerto inicio y un puerto fin, devuelve el listado de puertos.
+     * 
+     * @param puertoIni
+     * @param puertoFin
+     * @return listado
+     */
+    private static List<Integer> listadoPuertos(Integer puertoIni, Integer puertoFin) {
+    	
+    	List<Integer> listado = new ArrayList<Integer>();
+    	
+    	for (Integer i = puertoIni; i<= puertoFin; i++) {
+    		listado.add(i);
+    	}
+    	
+    	return listado;
     }
 }
     

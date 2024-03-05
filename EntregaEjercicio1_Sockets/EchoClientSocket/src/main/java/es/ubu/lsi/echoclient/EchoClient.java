@@ -57,17 +57,17 @@ public class EchoClient {
                 new BufferedReader(
                     new InputStreamReader(System.in))
         ) {
+
             String userInput;
             while ((userInput = stdIn.readLine()) != null) {
-                out.println(userInput);
+            	out.println(userInput);
                 System.out.println("echo: " + in.readLine());
             }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " +
-                hostName);
+            System.err.println("Couldn't get I/O for the connection to " + hostName); 
             System.exit(1);
         } 
     }

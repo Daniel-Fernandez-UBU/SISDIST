@@ -1,5 +1,7 @@
 package es.ubu.lsi;
 	
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -19,12 +21,33 @@ public class Servidor implements HolaMundo {
 		return "Hola mundo!";
     }
 	
+	
+	@Override
+	public float sumar(float numero1, float numero2) throws RemoteException {
+		return numero1 + numero2;
+	}
+
+	@Override
+	public float restar(float numero1, float numero2) throws RemoteException {
+		return numero1 - numero2;
+	}
+
+	@Override
+	public float multiplicar(float numero1, float numero2) throws RemoteException {
+		return numero1 * numero2;
+	}
+
+	@Override
+	public float dividir(float numero1, float numero2) throws RemoteException {
+		return numero1 / numero2;
+	}
+	
 	/**
 	 * Método raíz.
 	 *
 	 * @param args argumentos
 	 */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws RemoteException, AlreadyBoundException {
 	
 		try {
 		    Servidor obj = new Servidor();
@@ -41,6 +64,7 @@ public class Servidor implements HolaMundo {
 		catch (Exception e) {
 		    System.err.println("Excepción de servidor: " + e.toString());
 		}
+
     } // main
     
 } // Servidor
